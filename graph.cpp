@@ -61,6 +61,7 @@ Graph::Graph() : size(0) {
     }
 }
 
+
 void Graph::CalcValue(double omega){
     if(size==0) throw IoError("empty input");
     for(int i=0;i<size;i++){
@@ -73,6 +74,7 @@ void Graph::CalcValue(double omega){
         }
     }
 }
+
 
 void Graph::print(){
 
@@ -87,9 +89,16 @@ void Graph::print(){
     }
 }
 
-Edge Graph::findloop(){
 
-    deque<Edge> edges;
+deque<int> visitednodes;
+EdgeVector loop;
+bool endsgn;
+
+Edge2D Graph::findloop(){
+
+    Edge2D allloops;
+    EdgeVector edges;
+
     for(int i=0;i<size;i++){
         for(int j=i;j<size;j++){
             if(value[i][j]!=nullopt){
@@ -97,28 +106,57 @@ Edge Graph::findloop(){
             }
         }
     }
-    
+
     while(!edges.empty()){
         int startnode=edges.front().first;
-        deque<int> nownodes;
-        nownodes.push_back(startnode);
+        int currentnode=edges.front().second;
+        bool endsgn=0;
+
+        visitednodes.clear();
+        loop.clear();
+
+        visitednodes.push_back(startnode);
+        visitednodes.push_back(currentnode);
+        loop.push_back(Edge(startnode,currentnode));
         edges.pop_front();
-        while(!nownodes.empty()){
-            for(auto i : nownodes){
-                std::cout<<" "<<i;
-                if(i==startnode) goto END; 
-            }
-            END:break;
-            std::cout<<std::endl;
 
-            int current=nownodes.front();
-            nownodes.pop_front();
-            for(int i=0;i<size;i++)
-                if(value[current][i]!=nullopt)
-                    nownodes.push_back(i);
-
-           
-        }
+        auto temp=DFS(currentnode,startnode,edges);
+        allloops.push_back(temp);
     }
-    throw IoError("1");
+    return allloops;
+}
+
+
+
+EdgeVector Graph::DFS(int currentnode,int startnode,EdgeVector& edges){
+
+    if(value[currentnode][startnode]!=nullopt && loop.size()!=1){
+        loop.push_back(pair<int,int>(currentnode,startnode));
+        for(auto i : loop){
+            for(auto j=edges.begin();j!=edges.end();j++){
+                if((i.first==(*j).first && i.second==(*j).second) || (i.second==(*j).first && i.first==(*j).second))
+                    edges.erase(j);
+            }
+        }
+        endsgn=1;
+        return loop;
+    }
+
+    for(int i=0;i<5;i++){
+        for(int j=0;j<visitednodes.size();j++){
+            if(visitednodes[j]==i)
+                goto NEXT;
+        }
+        
+
+        if(value[currentnode][i]!=nullopt){
+            visitednodes.push_back(i);
+            loop.push_back(pair<int,int>(currentnode,i));
+            DFS(i,startnode,edges);
+            if(endsgn==1) return loop;
+            loop.pop_back();
+            visitednodes.pop_back();
+        }
+        NEXT: continue;//logic
+    }
 }

@@ -1,13 +1,15 @@
 #include <optional>
 #include <iostream>
 #include <vector>
+#include <deque>
 #include "devices.h"
 #ifndef GRAPH_H
 #define GRAPH_H
-using std::vector;
+using std::vector,std::deque;
 
 typedef std::pair<int,int> Edge;
-
+typedef deque<Edge> EdgeVector;
+typedef deque<deque<Edge>> Edge2D;
 
 struct InputStruct{
     int a;
@@ -30,6 +32,8 @@ public:
     Graph();
     void print();
     void CalcValue(double omega);
-    Edge findloop();
+    Edge2D findloop();
+    EdgeVector DFS(int currentnode,int startnode,EdgeVector& egdes);
 };
+
 #endif

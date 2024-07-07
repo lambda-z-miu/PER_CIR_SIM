@@ -15,7 +15,13 @@ int main(){
     Graph graph;
     graph.CalcValue(2);
     graph.print();
-    graph.findloop();
+    auto p=graph.findloop();
+    for(auto i : p){
+        for(auto j : i){
+            std::cout<<j.first<<"->"<<j.second<<" ";
+        }
+        std::cout<<std::endl;
+    }
 
     /*
     std::cout<<clock()<<endl;
