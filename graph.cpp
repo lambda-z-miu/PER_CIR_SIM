@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <deque>
+#include <cassert>
 
 using std::cin,std::nullopt,std::pair,std::deque;
 
@@ -16,6 +17,7 @@ void InputStruct::getFromCin(InputStruct& input){
 }
 
 Graph::Graph() : size(0) {
+    InputStruct buffer[16];
     int sizecnt=0;
     while(cin){
         InputStruct::getFromCin(buffer[sizecnt]);
@@ -48,6 +50,11 @@ Graph::Graph() : size(0) {
 
             case 'C':
                 data[buffer[i].a][buffer[i].b]=new C(buffer[i].data);
+                data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
+                break;
+
+            case 'E':
+                data[buffer[i].a][buffer[i].b]=new E(buffer[i].data);
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
             
@@ -91,13 +98,12 @@ void Graph::print(){
 
 
 deque<int> visitednodes;
-EdgeVector loop;
+Edgedeque loop;
 bool endsgn;
 
 Edge2D Graph::findloop(){
 
     Edge2D allloops;
-    EdgeVector edges;
 
     for(int i=0;i<size;i++){
         for(int j=i;j<size;j++){
@@ -128,7 +134,7 @@ Edge2D Graph::findloop(){
 
 
 
-EdgeVector Graph::DFS(int currentnode,int startnode,EdgeVector& edges){
+Edgedeque Graph::DFS(int currentnode,int startnode,Edgedeque& edges){
 
     if(value[currentnode][startnode]!=nullopt && loop.size()!=1){
         loop.push_back(pair<int,int>(currentnode,startnode));
@@ -159,4 +165,78 @@ EdgeVector Graph::DFS(int currentnode,int startnode,EdgeVector& edges){
         }
         NEXT: continue;//logic
     }
+    throw GraphError("Cannot find a loop containing an edge");
+}
+
+Complex2D Graph::getequation(Edge2D loopsin){
+
+    Complex2D ret;
+    ret.clear();
+    int edgesize;
+
+    for(int i=0;i<size;i++){
+        for(int j=i;j<size;j++){
+            if(value[i][j]!=nullopt){
+                edges.push_back(Edge(i,j));
+            }
+        }
+    }
+    edgesize=edges.size();
+
+    auto find=[=](Graph* base,Edge a){
+        for(int i=0;i<base->edges.size();i++){
+            if(base->edges[i]==a) return i;
+        }
+        return -1;
+    };
+
+
+
+    Complexdeque KCLindex;
+
+    for(int i=0;i<size-1;i++){
+        KCLindex.clear();
+        for(int j=0;j<=edgesize;j++) KCLindex.push_back(0);
+        for(int j=0;j<size;j++){
+            if(value[i][j]!=nullopt){
+                if(i<j) KCLindex[find(this,Edge(i,j))]=-1;
+                if(i>j) KCLindex[find(this,Edge(j,i))]=1;
+            }
+        }
+        ret.push_back(KCLindex);
+    }
+
+    Complexdeque KVLindex;
+
+
+    for(auto i : loopsin){
+
+        KVLindex.clear();
+        for(int j=0;j<=edgesize;j++) KVLindex.push_back(0);
+        for(auto j : i){
+
+            // if not E
+            if(!isE(data[j.first][j.second].value())){
+                if(j.first<j.second)
+                    KVLindex[find(this,Edge(j.first,j.second))]=value[j.first][j.second].value();
+                if(j.first>j.second)
+                    KVLindex[find(this,Edge(j.second,j.first))]=-value[j.first][j.second].value();
+            }
+
+            else{
+                if(j.first<j.second)
+                {
+                    KVLindex[edgesize]=-data[j.first][j.second].value()->epsilon.value();
+                }
+                if(j.first>j.second)
+                    KVLindex[edgesize]=-data[j.first][j.second].value()->epsilon.value();
+            }
+        }
+
+        ret.push_back(KVLindex);
+    }
+
+    return ret;
+
+
 }

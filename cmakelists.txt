@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.10)
+project(MyProject)
+
+# 设置 C++ 标准
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 添加可执行文件并指定源文件
+add_executable(target 
+    devices.cpp
+    graph.cpp
+    linear.cpp
+    main.cpp
+)
+
+# 添加头文件路径
+target_include_directories(target PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# 如果有其他依赖的库或头文件，可以在这里添加
+
+# 如果有其他的库依赖，比如 Boost 或者其他第三方库，可以使用 find_package() 和 target_link_libraries() 添加
+

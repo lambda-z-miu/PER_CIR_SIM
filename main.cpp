@@ -1,9 +1,11 @@
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
-#include <vector>
+#include <deque>
 #include <windows.h>
 #include "linear.h"
 #include "graph.h"
+#include "devices.h"
 
 
 using namespace std;
@@ -22,6 +24,15 @@ int main(){
         }
         std::cout<<std::endl;
     }
+    
+    auto test=graph.getequation(p);
+
+    for(auto i : test){
+        for(auto j : i){
+            std::cout<<setw(12)<<j<<" ";
+        }
+        std::cout<<std::endl;
+    }
 
     /*
     std::cout<<clock()<<endl;
@@ -29,7 +40,7 @@ int main(){
 
     Complex2D tar;
     for(int i=0;i<14;i++){
-        ComplexVector temp;
+        Complexdeque temp;
         for(int j=0;j<15;j++){
             complex<double> randnum=rand()/1000;
             std::cout<<randnum;

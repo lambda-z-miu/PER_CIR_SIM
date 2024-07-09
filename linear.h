@@ -1,23 +1,24 @@
-#include <vector>
+#include <deque>
+
 #include <complex>
 
 #ifndef MATH_H
 #define MATH_H
 
-using std::vector,std::complex;
-typedef vector<vector<complex<double>>> Complex2D;
-typedef vector<complex<double>> ComplexVector;
+using std::deque,std::complex;
+typedef deque<deque<complex<double>>> Complex2D;
+typedef deque<complex<double>> Complexdeque;
 class Matrix
 {
     int size;
-    vector<vector<complex<double>>> data;
+    deque<deque<complex<double>>> data;
 
 public:
     int getsize();
     Matrix(Complex2D datain) : size(datain.size()),data(datain) {}
     Matrix(){}
     complex<double> deter();
-    ComplexVector solve();
+    Complexdeque solve();
     void print();
 };
 

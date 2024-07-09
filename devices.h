@@ -9,48 +9,59 @@
 
 using std::complex,std::optional;
 
-class RLCM{
+class RLCME{
 public:
     optional<complex<double>> current;
     optional<complex<double>> resistance;
     optional<complex<double>> voltage;
+    optional<complex<double>> epsilon;
+
 public:
-    RLCM() : current(NULL),voltage(NULL),resistance(NULL){};
+    RLCME() : current(NULL),voltage(NULL),resistance(NULL),epsilon(NULL){};
     virtual optional<complex<double>> calresistance(double omega)=0;
 };
 
-class R:public RLCM{
+class R:public RLCME{
 public:
-    R(double datain) :RLCM() {
+    R(double datain) :RLCME() {
         resistance=datain;
     }
     optional<complex<double>> calresistance(double omega) override;
 };
 
-class L:public RLCM{
+class L:public RLCME{
 public:
-    L(double datain) :RLCM(){
+    L(double datain) :RLCME(){
         resistance=datain*_i(1);
     }
     optional<complex<double>> calresistance(double omega) override;
 };
 
-class C:public RLCM{
+class C:public RLCME{
 public:
-    C(double datain) : RLCM(){
+    C(double datain) : RLCME(){
         resistance=-datain*_i(1);
     }
     optional<complex<double>> calresistance(double omega) override;
 };
 
-class General : RLCM{
-    General(RLCM* a,RLCM* b) : RLCM(){
+class E :public RLCME{
+public:
+    E(double datain) :RLCME(){
+        resistance=0;
+        epsilon=datain;
+    }
+    optional<complex<double>> calresistance(double omega) override;
+};
+
+class General : RLCME{
+    General(RLCME* a,RLCME* b) : RLCME(){
         if(a->resistance.has_value() && b->resistance.has_value())
             resistance=a->resistance.value()+b->resistance.value();
         else throw IoError("INvalid Input");
     }
 };
 
-
+bool isE(RLCME* a);
 
 #endif

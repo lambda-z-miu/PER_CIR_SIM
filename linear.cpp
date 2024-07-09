@@ -22,7 +22,7 @@ complex<double> Matrix::deter(){
         throw MatrixError("invalid determinant");
     }
 
-    auto getsgn=[](vector<int> order){
+    auto getsgn=[](deque<int> order){
         int ret=0;
         for(int i=0;i<order.size();i++){
             for(int j=i;j<order.size();j++){
@@ -32,7 +32,7 @@ complex<double> Matrix::deter(){
         return 1-2*(ret%2);
     };
 
-    vector<int> order;
+    deque<int> order;
     complex<double> ret=0;
     for(int i=1;i<=size;i++) order.push_back(i);
     do{
@@ -47,7 +47,7 @@ complex<double> Matrix::deter(){
     return ret;
 }
 
-vector<complex<double>> Matrix::solve(){
+deque<complex<double>> Matrix::solve(){
     if(data.size()!=data[0].size()-1) throw MatrixError("Cannot solve");
 
     Complex2D crammerdelta;
@@ -58,7 +58,7 @@ vector<complex<double>> Matrix::solve(){
     Matrix delta{crammerdelta};
     complex<double> denominator=delta.deter();
 
-    ComplexVector ret={};
+    Complexdeque ret={};
     for(int i=0;i<data.size();i++){
         Complex2D temp;
         for(auto j : data) {
