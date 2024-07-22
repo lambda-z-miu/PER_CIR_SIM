@@ -1,3 +1,4 @@
 .vscode
 *.exe
 build*
+eigen-3.4.0*
