@@ -11,48 +11,43 @@
 using namespace std;
 
 int main(){
-    //std::complex<double> a(0,1);
-    //std::cout<<_i(2);
-
     Graph graph;
+
+    auto time_0=clock();
     graph.CalcValue(2);
-    graph.print();
+//  graph.print();
     auto p=graph.findloop();
+
+/*
     for(auto i : p){
         for(auto j : i){
             std::cout<<j.first<<"->"<<j.second<<" ";
         }
         std::cout<<std::endl;
     }
-    
-    auto test=graph.getequation(p);
+*/    
 
+    auto test=graph.getequation(p);
+/*
     for(auto i : test){
         for(auto j : i){
             std::cout<<setw(12)<<j<<" ";
         }
         std::cout<<std::endl;
     }
+    std::cout<<std::endl;
+*/
 
-    /*
-    std::cout<<clock()<<endl;
-    srand(static_cast<unsigned int>(time(0)));
+    Matrix indexs{test};
+    auto answers=indexs.solve();
 
-    Complex2D tar;
-    for(int i=0;i<14;i++){
-        Complexdeque temp;
-        for(int j=0;j<15;j++){
-            complex<double> randnum=rand()/1000;
-            std::cout<<randnum;
-            temp.push_back(randnum);
-        }
-        tar.push_back(temp);
+    auto time_1=clock();
+
+    std::cout<<"After "<<(time_1-time_0)/1000.01<<" seconds :"<<std::endl;
+    
+    for(int i=0;i<answers.size();i++) {
+        std::cout<<graph.edges[i].first<<"->"<<graph.edges[i].second<<": i="<<
+        answers[i].real()<<(answers[i].imag()<0 ? "" : "+")<<answers[i].imag()<<"j";
+        std::cout<<std::endl;
     }
-    Matrix d{tar};
-    //cout<<d.deter();
-    std::cout<<endl<<clock()<<endl;
-    auto e=d.solve();
-    std::cout<<clock()<<endl;
-    for(auto i :e) cout<<i;
-    */
 }
