@@ -1,20 +1,13 @@
 #include "graph.h"
 #include <cstring>
 #include "error.h"
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <deque>
 #include <cassert>
 
 using std::cin,std::nullopt,std::pair,std::deque;
 
-
-void InputStruct::getFromCin(InputStruct& input){
-    int a,b;char c;double d;
-    cin>>a>>b>>c>>d;
-    InputStruct ret(a,b,c,d);
-    input=ret;
-}
 
 Graph::Graph() : size(0) {
     InputStruct buffer[16];
@@ -39,22 +32,22 @@ Graph::Graph() : size(0) {
         switch (buffer[i].name)
         {
             case 'R':
-                data[buffer[i].a][buffer[i].b]=new R(buffer[i].data);
+                data[buffer[i].a][buffer[i].b]=new R(buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
             
             case 'L':
-                data[buffer[i].a][buffer[i].b]=new L(buffer[i].data);
+                data[buffer[i].a][buffer[i].b]=new L(buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
 
             case 'C':
-                data[buffer[i].a][buffer[i].b]=new C(buffer[i].data);
+                data[buffer[i].a][buffer[i].b]=new C(buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
 
             case 'E':
-                data[buffer[i].a][buffer[i].b]=new E(buffer[i].data);
+                data[buffer[i].a][buffer[i].b]=new E(buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
             
@@ -238,5 +231,12 @@ Complex2D Graph::getequation(Edge2D loopsin){
 
     return ret;
 
+}
 
+Graph::~Graph(){
+    for(int i=0;i<16;i++)
+        for(int j=0;j<16;j++)
+            if(data[i][j]!=std::nullopt)
+                delete data[i][j].value();
+        
 }

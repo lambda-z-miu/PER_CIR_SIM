@@ -1,27 +1,19 @@
 #include <optional>
-#include <iostream>
-#include <deque>
 #include <deque>
 #include "devices.h"
-#include "linear.h"
+#include "io.h"
+
 #ifndef GRAPH_H
 #define GRAPH_H
-using std::deque,std::deque;
+using std::deque,std::deque,std::complex;;
+typedef deque<deque<complex<double>>> Complex2D;
+typedef deque<complex<double>> Complexdeque;
 
 typedef std::pair<int,int> Edge;
 typedef deque<Edge> Edgedeque;
 typedef deque<deque<Edge>> Edge2D;
 
-struct InputStruct{
-    int a;
-    int b;
-    char name;
-    double data;
 
-    InputStruct(int ain,int bin,char namein,double datain) : a(ain),b(bin),name(namein),data(datain) {};
-    InputStruct(){}
-    static void getFromCin(InputStruct& a);
-};
 
 class Graph
 {
@@ -41,5 +33,8 @@ public:
     Edgedeque DFS(int currentnode,int startnode,Edgedeque& egdes);
 
     Complex2D getequation(Edge2D loopsin);
+
+    friend int main();
+    ~Graph();
 };
 #endif

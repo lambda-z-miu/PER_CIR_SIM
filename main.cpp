@@ -5,14 +5,17 @@
 #include <windows.h>
 #include "graph.h"
 #include "devices.h"
+#include "io.h"
 
-#include <eigen-3.4.0/Eigen/Core>
 #include <eigen-3.4.0/Eigen/Dense>
+#include <eigen-3.4.0/Eigen/Core>
+
 
 
 using namespace std;
 
 int main(){
+
     Graph graph;
 
     auto time_0=clock();
@@ -21,9 +24,7 @@ int main(){
     auto p=graph.findloop();
 
     auto test=graph.getequation(p);
-
-
-    Matrix indexs{test};
+//  Matrix indexs{test};
 
 
     int rows=test.size();
@@ -50,13 +51,15 @@ int main(){
 
     //std::cout<<std::endl<<"!!"<<std::endl<<answer<<std::endl;
 
+
     for(int i=0;i<answer.size();i++) {
         std::cout<<graph.edges[i].first<<"->"<<graph.edges[i].second<<": i="<<
         answer[i].real()<<(answer[i].imag()<0 ? "" : "+")<<answer[i].imag()<<"j";
+
+        auto tempvoltage=graph.value[graph.edges[i].first][graph.edges[i].second].value()*answer[i]+(*(graph.data[graph.edges[i].first][graph.edges[i].second]).value()->epsilon);
+        std::cout<<"\n      u="<<tempvoltage.real()<<(tempvoltage.imag()<0 ? "" : "+")<<tempvoltage.imag()<<"j";
         std::cout<<std::endl;
     }
 
-
-    //auto answers=indexs.solve();
 
 }

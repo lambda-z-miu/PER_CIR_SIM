@@ -10,6 +10,7 @@ add_executable(target
     devices.cpp
     graph.cpp
     main.cpp
+    io.cpp
 )
 
 # 添加头文件路径
