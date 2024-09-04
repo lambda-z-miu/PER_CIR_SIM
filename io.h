@@ -1,6 +1,6 @@
 #include <string>
-#include <eigen-3.4.0/Eigen/Dense>
 #include <eigen-3.4.0/Eigen/Core>
+
 using std::string;
 #ifndef IO_H
 #define IO_H
@@ -24,7 +24,10 @@ struct InputStruct{
     static void getFromCin(InputStruct& a);
 };
 
+class Graph;
+
 std::istream& operator>>(std::istream& input,Snum& target);
+void output(Graph circuit,Eigen::VectorXcd answer);
 
 
 #endif

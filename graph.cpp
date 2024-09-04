@@ -1,16 +1,18 @@
 #include "graph.h"
 #include <cstring>
 #include "error.h"
+#include "io.h"
 #include <iomanip>
 #include <iostream>
 #include <deque>
 #include <cassert>
 
+
 using std::cin,std::nullopt,std::pair,std::deque;
 
 
 Graph::Graph() : size(0) {
-    InputStruct buffer[16];
+    InputStruct buffer[MAXBUFFER];
     int sizecnt=0;
     while(cin){
         InputStruct::getFromCin(buffer[sizecnt]);
@@ -22,8 +24,8 @@ Graph::Graph() : size(0) {
         if(buffer[i].b>size) size=buffer[i].b+1;
     }
 
-    for(int i=0;i<16;i++){
-        for(int j=0;j<16;j++){
+    for(int i=0;i<MAXBUFFER;i++){
+        for(int j=0;j<MAXBUFFER;j++){
             data[i][j]=std::nullopt;
         }
     }
@@ -234,8 +236,8 @@ Complex2D Graph::getequation(Edge2D loopsin){
 }
 
 Graph::~Graph(){
-    for(int i=0;i<16;i++)
-        for(int j=0;j<16;j++)
+    for(int i=0;i<MAXBUFFER;i++)
+        for(int j=0;j<MAXBUFFER;j++)
             if(data[i][j]!=std::nullopt)
                 delete data[i][j].value();
         

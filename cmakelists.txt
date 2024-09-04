@@ -11,6 +11,7 @@ add_executable(target
     graph.cpp
     main.cpp
     io.cpp
+    solver.cpp
 )
 
 # 添加头文件路径

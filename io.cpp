@@ -2,6 +2,8 @@
 #include <math.h>
 #include "io.h"
 #include "error.h"
+#include "graph.h"
+
 using std::cin,std::cout;
 
 
@@ -56,6 +58,17 @@ double Snum::getval(){
         return val;
     default:
         throw IoError("invalid prefix");
+    }
+}
+
+void output(Graph circuit,Eigen::VectorXcd answer){
+    for(int i=0;i<answer.size();i++) {
+        std::cout<<circuit.edges[i].first<<"->"<<circuit.edges[i].second<<": i="<<
+        answer[i].real()<<(answer[i].imag()<0 ? "" : "+")<<answer[i].imag()<<"j";
+
+        auto tempvoltage=circuit.value[circuit.edges[i].first][circuit.edges[i].second].value()*answer[i]+(*(circuit.data[circuit.edges[i].first][circuit.edges[i].second]).value()->epsilon);
+        std::cout<<"\n      u="<<tempvoltage.real()<<(tempvoltage.imag()<0 ? "" : "+")<<tempvoltage.imag()<<"j";
+        std::cout<<std::endl;
     }
 }
 
