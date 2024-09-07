@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <windows.h>
+#include <memory>
 #include "graph.h"
 #include "io.h"
 
@@ -10,13 +11,23 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
+using std::shared_ptr,std::make_shared;
+
 enum Wave{
     SIN,
-    TRIANGLE,
+    TRI,
+    PWM,
+    REC,
+    SAW,
 };
 
+
 struct Solver{
-    void solve(Graph circuit,int omega,enum Wave);
+    Solver(){looplist={};}
+    Edge2D looplist;
+    void iniedge(Graph& circuit,double omega);
+    Eigen::VectorXcd decode(Graph circuit,enum Wave,double omega);
+    Eigen::VectorXcd solve(Graph circuit,double omega);
 };
 
 #endif

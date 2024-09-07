@@ -34,22 +34,22 @@ Graph::Graph() : size(0) {
         switch (buffer[i].name)
         {
             case 'R':
-                data[buffer[i].a][buffer[i].b]=new R(buffer[i].data.getval());
+                data[buffer[i].a][buffer[i].b]=new R (buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
             
             case 'L':
-                data[buffer[i].a][buffer[i].b]=new L(buffer[i].data.getval());
+                data[buffer[i].a][buffer[i].b]=new L (buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
 
             case 'C':
-                data[buffer[i].a][buffer[i].b]=new C(buffer[i].data.getval());
+                data[buffer[i].a][buffer[i].b]=new C (buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
 
             case 'E':
-                data[buffer[i].a][buffer[i].b]=new E(buffer[i].data.getval());
+                data[buffer[i].a][buffer[i].b]=new E (buffer[i].data.getval());
                 data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
                 break;
             
@@ -233,12 +233,4 @@ Complex2D Graph::getequation(Edge2D loopsin){
 
     return ret;
 
-}
-
-Graph::~Graph(){
-    for(int i=0;i<MAXBUFFER;i++)
-        for(int j=0;j<MAXBUFFER;j++)
-            if(data[i][j]!=std::nullopt)
-                delete data[i][j].value();
-        
 }

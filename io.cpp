@@ -61,14 +61,18 @@ double Snum::getval(){
     }
 }
 
-void output(Graph circuit,Eigen::VectorXcd answer){
+void output(const Graph& circuit,Eigen::VectorXcd answer){
+    
     for(int i=0;i<answer.size();i++) {
-        std::cout<<circuit.edges[i].first<<"->"<<circuit.edges[i].second<<": i="<<
-        answer[i].real()<<(answer[i].imag()<0 ? "" : "+")<<answer[i].imag()<<"j";
+        std::cout<<circuit.edges[i].first<<"->"<<circuit.edges[i].second;
+        std::cout<<": i="<<answer[i].real()<<(answer[i].imag()<0 ? "" : "+")<<answer[i].imag()<<"j";
 
-        auto tempvoltage=circuit.value[circuit.edges[i].first][circuit.edges[i].second].value()*answer[i]+(*(circuit.data[circuit.edges[i].first][circuit.edges[i].second]).value()->epsilon);
+
+        auto tempvoltage=circuit.value[circuit.edges[i].first][circuit.edges[i].second].value()*answer[i]
+                +(*(circuit.data[circuit.edges[i].first][circuit.edges[i].second]).value()->epsilon);
+
         std::cout<<"\n      u="<<tempvoltage.real()<<(tempvoltage.imag()<0 ? "" : "+")<<tempvoltage.imag()<<"j";
-        std::cout<<std::endl;
+        std::cout<<"\n\n";
     }
 }
 

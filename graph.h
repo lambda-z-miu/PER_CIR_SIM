@@ -3,13 +3,16 @@
 #include "devices.h"
 #include <eigen-3.4.0/Eigen/Core>
 
+
+#include <iostream>
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
 #define MAXBUFFER 32
 
 
-using std::deque,std::deque,std::complex;;
+using std::deque,std::deque,std::complex;
 typedef deque<deque<complex<double>>> Complex2D;
 typedef deque<complex<double>> Complexdeque;
 
@@ -39,7 +42,10 @@ public:
     Complex2D getequation(Edge2D loopsin);
 
     friend Solver;
-    friend void output(Graph circuit,Eigen::VectorXcd answer);
-    ~Graph();
+    friend void output(const Graph& circuit,Eigen::VectorXcd answer);
+
+    ~Graph(){
+        std::cout<<"Graph destoyed";
+    }
 };
 #endif

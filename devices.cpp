@@ -1,6 +1,7 @@
 #include "devices.h"
 #include "error.h"
 
+
 optional<complex<double>> R::calresistance(double omega){
     if(this->resistance.has_value())
         return this->resistance.value();

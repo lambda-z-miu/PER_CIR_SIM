@@ -27,7 +27,7 @@ struct InputStruct{
 class Graph;
 
 std::istream& operator>>(std::istream& input,Snum& target);
-void output(Graph circuit,Eigen::VectorXcd answer);
+void output(const Graph& circuit,Eigen::VectorXcd answer);
 
 
 #endif

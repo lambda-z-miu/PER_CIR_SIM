@@ -17,7 +17,11 @@ using namespace std;
 int main(){
 
     Graph graph;
+
     Solver solver;
-    solver.solve(graph,2,SIN);
+
+    //solver.decode(graph,SIN,2);
+    solver.decode(graph,REC,2);
+    //solver.solve(graph,2);
 
 }
