@@ -45,6 +45,12 @@ public:
     friend void output(const Graph& circuit,Eigen::VectorXcd answer);
 
     ~Graph(){
+        for(int i=0;i<MAXBUFFER;i++){
+            for(int j=0;j<MAXBUFFER;j++){
+                if(data[i][j]!=std::nullopt)
+                    delete data[i][j].value();
+            }
+        }
         std::cout<<"Graph destoyed";
     }
 };

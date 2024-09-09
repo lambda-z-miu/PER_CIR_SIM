@@ -35,22 +35,22 @@ Graph::Graph() : size(0) {
         {
             case 'R':
                 data[buffer[i].a][buffer[i].b]=new R (buffer[i].data.getval());
-                data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
+                data[buffer[i].b][buffer[i].a]=new R (buffer[i].data.getval());
                 break;
             
             case 'L':
                 data[buffer[i].a][buffer[i].b]=new L (buffer[i].data.getval());
-                data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
+                data[buffer[i].b][buffer[i].a]=new L (buffer[i].data.getval());;
                 break;
 
             case 'C':
                 data[buffer[i].a][buffer[i].b]=new C (buffer[i].data.getval());
-                data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
+                data[buffer[i].b][buffer[i].a]=new C (buffer[i].data.getval());
                 break;
 
             case 'E':
                 data[buffer[i].a][buffer[i].b]=new E (buffer[i].data.getval());
-                data[buffer[i].b][buffer[i].a]=data[buffer[i].a][buffer[i].b];
+                data[buffer[i].b][buffer[i].a]=new E (buffer[i].data.getval());
                 break;
             
             case 'M':
