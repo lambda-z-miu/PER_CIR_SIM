@@ -25,7 +25,7 @@ optional<complex<double>> E::calresistance(double omega){
 }
 
 
-bool isE(RLCME* a){
+bool isE(shared_ptr<RLCME> a){
     if(typeid(*a)==typeid(E)) return 1;
     return 0;
 }

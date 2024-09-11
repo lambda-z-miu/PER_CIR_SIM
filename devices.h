@@ -65,6 +65,6 @@ class General : RLCME{
     }
 };
 
-bool isE(RLCME* a);
+bool isE(shared_ptr<RLCME> a);
 
 #endif

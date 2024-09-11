@@ -8,42 +8,31 @@
 
 Eigen::VectorXcd Solver::decode(Graph circuit,enum Wave wave,double omega){
 
-    deque<double> amplitude;
+    double amplitudes[20];
+    double SinAmplitudes[20]={0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-    auto lambda= [&](Graph circuit,deque<double> amplitude,double omega) -> Eigen::VectorXcd
-    {
+    double TriAmplitudes[20]={0,1,0,(double)-1/9,0,(double)1/25,0,-(double)1/49,0,(double)1/81,
+                              0,(double)-1/121,0,(double)1/169,0,(double)-1/225,0,(double)1/289,0,(double)-1/361};
+    for(auto i : TriAmplitudes)
+        i*=(8/(pi*pi));
 
-        auto ans=this->solve(circuit,omega);
-        ans*=amplitude[1];
-
-        for(int i=2;i<20;i++){
-            if(amplitude[i]==0) continue;
-            double tempomega = i * omega;
-            auto tempans = this->solve(circuit,tempomega);
-            ans+=amplitude[i]*tempans;
-            circuit.edges.clear();
-        }
-
-
-        return ans;
-    };
+    double RecAmplitudes[20]={0,1,0,(double)1/3,0,(double)1/5,0,(double)1/7,0,(double)1/9,0,
+                              (double)1/11,0,(double)1/13,0,(double)1/15,0,(double)1/17,0,(double)1/19};
+    for(auto i : RecAmplitudes)
+        i*=(4/pi);
+    
 
     switch(wave) {  
-
         case SIN:
-            amplitude={0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+            memcpy(amplitudes,SinAmplitudes,sizeof(amplitudes));
             break;
 
         case TRI:
-            amplitude={0,1,0,-1/9,0,1/25,0,-1/49,0,1/81,0,-1/121,0,1/169,0,-1/225,0,1/289,0,-1/361};
-            for(auto i : amplitude)
-                i*=(8/(pi*pi));
+            memcpy(amplitudes,TriAmplitudes,sizeof(amplitudes));
             break;
 
         case REC:
-            amplitude={0,1,0,1/3,0,1/5,0,1/7,0,1/9,0,1/11,0,1/13,0,1/15,0,1/17,0,1/19};
-            for(auto i : amplitude)
-                i*=(4/pi);
+            memcpy(amplitudes,RecAmplitudes,sizeof(amplitudes));
             break;
 
         case SAW:
@@ -55,11 +44,23 @@ Eigen::VectorXcd Solver::decode(Graph circuit,enum Wave wave,double omega){
             break;
     }
 
-    auto answer = lambda(circuit,amplitude,omega);
+    auto ans=this->solve(circuit,omega);
+    ans*=amplitudes[1];
+
+    for(int i=2;i<20;i++){
+        if(amplitudes[i]==0) continue;
+        double tempomega = i * omega;
+        auto tempans = amplitudes[i] * this->solve(circuit,tempomega);
+        //std::cout<<"answer"<<i<<"="<<tempans;
+        ans+=tempans;
+        circuit.edges.clear();
+    }
+
+
 
     this->iniedge(circuit,omega);
-    output(circuit,answer);
-    return answer;
+    output(circuit,ans);
+    return ans;
 }
 
 
@@ -67,6 +68,7 @@ Eigen::VectorXcd Solver::decode(Graph circuit,enum Wave wave,double omega){
 Eigen::VectorXcd Solver::solve(Graph circuit,double omega){
 
     circuit.CalcValue(omega);
+    //circuit.print();
     if (looplist.empty())
         looplist=circuit.findloop();
 
@@ -76,11 +78,13 @@ Eigen::VectorXcd Solver::solve(Graph circuit,double omega){
     Eigen::MatrixXcd L(rows,rows);
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < rows; ++j) {
+            //std::cout<<test[i][j]<<" ";
             L(i, j) = test[i][j];
         }
+    //    std::cout<<std::endl;
     }
 
-
+    
     Eigen::VectorXcd R(rows);
     for(int i=0;i<rows;i++){
         R(i)=test[i].back();

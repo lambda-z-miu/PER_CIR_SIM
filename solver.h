@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <windows.h>
 #include <memory>
 #include "graph.h"
 #include "io.h"

@@ -1,6 +1,7 @@
 #include <optional>
 #include <deque>
 #include "devices.h"
+#include <memory>
 #include <eigen-3.4.0/Eigen/Core>
 
 
@@ -13,6 +14,9 @@
 
 
 using std::deque,std::deque,std::complex;
+using std::shared_ptr,std::make_shared;
+
+
 typedef deque<deque<complex<double>>> Complex2D;
 typedef deque<complex<double>> Complexdeque;
 
@@ -20,12 +24,13 @@ typedef std::pair<int,int> Edge;
 typedef deque<Edge> Edgedeque;
 typedef deque<deque<Edge>> Edge2D;
 
+
 class Solver;
 
 class Graph
 {
     int size;
-    optional<RLCME*> data[MAXBUFFER][MAXBUFFER];
+    optional<shared_ptr<RLCME>> data[MAXBUFFER][MAXBUFFER];
     optional<complex<double>> value[MAXBUFFER][MAXBUFFER];
     
 
@@ -44,14 +49,5 @@ public:
     friend Solver;
     friend void output(const Graph& circuit,Eigen::VectorXcd answer);
 
-    ~Graph(){
-        for(int i=0;i<MAXBUFFER;i++){
-            for(int j=0;j<MAXBUFFER;j++){
-                if(data[i][j]!=std::nullopt)
-                    delete data[i][j].value();
-            }
-        }
-        std::cout<<"Graph destoyed";
-    }
 };
 #endif

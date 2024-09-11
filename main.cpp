@@ -16,12 +16,17 @@ using namespace std;
 
 int main(){
 
+    std::cout<<"Input Graph";
     Graph graph;
-
     Solver solver;
 
     //solver.decode(graph,SIN,2);
-    solver.decode(graph,REC,2);
+    //solver.decode(graph,SIN,4);
+    //std::cout<<solver.solve(graph,10);
+    solver.decode(graph,TRI,2);
+    /*
+    std::cout<<"---------------------";
+    solver.decode(graph,REC,2);*/
     //solver.solve(graph,2);
 
 }
